@@ -8,7 +8,6 @@ import textwrap
 # Fonts on the card
 partnerNameFont = ImageFont.truetype("fonts/BarlowCondensed-Medium.ttf", 64)
 labelFont = ImageFont.truetype("fonts/BarlowCondensed-Medium.ttf", 35)
-conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 30)
 flavorFont = ImageFont.truetype("fonts/BarlowCondensed-LightItalic.ttf", 35)
 
 # Size of the card
@@ -36,15 +35,39 @@ for index, row in df.iterrows():
 	conditionFour = str(row['condition 4'])
 	conditionFive = str(row['condition 5'])
 
+	#Set the font size by the length of the conditions in  each Scenario
+	scenarioLength = (len(conditionOne))+(len(conditionTwo))+(len(conditionThree))+(len(conditionFour))+(len(conditionFive))
+
+	if scenarioLength < 550:
+		conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 30)
+		bullet1 = textwrap.wrap(conditionOne, width= 38)
+		bullet2 = textwrap.wrap(conditionTwo, width= 38)
+		bullet3 = textwrap.wrap(conditionThree, width= 38)
+		bullet4 = textwrap.wrap(conditionFour, width= 38)
+		bullet5 = textwrap.wrap(conditionFive, width= 38)
+	if  scenarioLength > 550:
+		conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 26)
+		bullet1 = textwrap.wrap(conditionOne, width= 42)
+		bullet2 = textwrap.wrap(conditionTwo, width= 42)
+		bullet3 = textwrap.wrap(conditionThree, width= 42)
+		bullet4 = textwrap.wrap(conditionFour, width= 42)
+		bullet5 = textwrap.wrap(conditionFive, width= 42)
+	if scenarioLength > 774:
+		conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 24)
+		bullet1 = textwrap.wrap(conditionOne, width= 48)
+		bullet2 = textwrap.wrap(conditionTwo, width= 48)
+		bullet3 = textwrap.wrap(conditionThree, width= 48)
+		bullet4 = textwrap.wrap(conditionFour, width= 48)
+		bullet5 = textwrap.wrap(conditionFive, width= 48)
+
 	# Calculate text size for wrapping
-	partnerNameFontSize = partnerNameFont.getbbox(partnerName);
 	conditionsFontSize = conditionsFont.getbbox(conditionOne);
 	flavorFontSize = flavorFont.getbbox(partnerText);
 
 	#Draw the black header
 	draw.rectangle(xy = (0, 0, 826, 340), fill = (0, 0, 0), outline = (0, 0, 0), width = 0) 
 
-	# Draw the word "Conditions" on the image
+	# Write the word "Conditions" on the image
 	draw.text((60, 265), 'CONDITIONS', fill='white', font=labelFont)
 
 	# Find the stripe color
@@ -70,6 +93,7 @@ for index, row in df.iterrows():
 	parterOneImage = Image.open(r"/Users/charliemackin/Documents/GitHub/DecorumCardMaker/Partner1Image.png")
 	parterTwoImage = Image.open(r"/Users/charliemackin/Documents/GitHub/DecorumCardMaker/Partner2Image.png")
 	checkImage = Image.open(r"/Users/charliemackin/Documents/GitHub/DecorumCardMaker/Check.png")
+	
 	# Find the partner number and paste the partner icons
 	if str(row['partner number']) == '1':
 		Image.Image.paste(card, parterOneImage, (576, 0))
@@ -77,18 +101,14 @@ for index, row in df.iterrows():
 	else:
 		Image.Image.paste(card, parterTwoImage, (576, 0))
 		
-	# Wrap text to the specified width
-	bullet1 = textwrap.wrap(conditionOne, width= 38)
-	bullet2 = textwrap.wrap(conditionTwo, width= 38)
-	bullet3 = textwrap.wrap(conditionThree, width= 38)
-	bullet4 = textwrap.wrap(conditionFour, width= 38)
-	bullet5 = textwrap.wrap(conditionFive, width= 38)
+	# Wrap the flavor text to the specified width
 	partnerText = textwrap.wrap(partnerText, width= 62)
 
-	#Set the hight of the first condition, will update as we print
-	conditionHeight = 415
+	#Set the height of the first condition and flavor text
+	conditionHeight = 365  
 	partnerTextHeight = 1270
 
+	#Adjust the partner name height if it's 2 rows
 	if "\n" in partnerName:
 		nameHeight = 15
 	else:
@@ -97,7 +117,8 @@ for index, row in df.iterrows():
 	# Draw the partner name on the image
 	draw.text((60, nameHeight), partnerName, fill='white', font=partnerNameFont) 
 	
-	# Draw wrapped lines of text on the image the first line of each condition has a check mark
+	# Draw conditions in wrapped lines of text on the card 
+	# The first line of each condition has a check mark
 	Image.Image.paste(card, checkImage, (60, conditionHeight))
 	for line in bullet1:
 		draw.text((130, conditionHeight), line, fill='black', font=conditionsFont)
@@ -136,6 +157,6 @@ for index, row in df.iterrows():
 		draw.text((60, partnerTextHeight), line, fill='black', font=flavorFont)
 		partnerTextHeight += flavorFontSize[3] # Move to the next line
 
-	# Save the image as a PNG file
+	# Save the card as a PNG file
 	fileName = 'cards/'+str(row['scenario'])
 	card.save(fileName.title().replace(" ",'')+'.png')
