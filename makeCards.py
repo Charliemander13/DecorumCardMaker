@@ -35,30 +35,45 @@ for index, row in df.iterrows():
 	conditionFour = str(row['condition 4'])
 	conditionFive = str(row['condition 5'])
 
-	#Set the font size by the length of the conditions in  each Scenario
-	scenarioLength = (len(conditionOne))+(len(conditionTwo))+(len(conditionThree))+(len(conditionFour))+(len(conditionFive))
+	#default line size
+	conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 30)
+	varSize = 38
 
-	if scenarioLength < 550:
-		conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 30)
-		bullet1 = textwrap.wrap(conditionOne, width= 38)
-		bullet2 = textwrap.wrap(conditionTwo, width= 38)
-		bullet3 = textwrap.wrap(conditionThree, width= 38)
-		bullet4 = textwrap.wrap(conditionFour, width= 38)
-		bullet5 = textwrap.wrap(conditionFive, width= 38)
-	if  scenarioLength > 550:
+	temp = conditionOne.split('\n')
+	tempList = list()
+
+	bullet1 = textwrap.wrap(conditionOne, width= varSize)
+
+	if len(temp)>1:
+		for line in temp:
+			tempList = tempList + textwrap.wrap(line, width= varSize)
+		bullet1 = tempList
+
+	bullet2 = textwrap.wrap(conditionTwo, width= varSize)
+	bullet3 = textwrap.wrap(conditionThree, width= varSize)
+	bullet4 = textwrap.wrap(conditionFour, width= varSize)
+	bullet5 = textwrap.wrap(conditionFive, width= varSize)
+
+	if len(bullet1)+len(bullet2)+len(bullet3)+len(bullet4)+len(bullet5) >17:
 		conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 26)
-		bullet1 = textwrap.wrap(conditionOne, width= 42)
-		bullet2 = textwrap.wrap(conditionTwo, width= 42)
-		bullet3 = textwrap.wrap(conditionThree, width= 42)
-		bullet4 = textwrap.wrap(conditionFour, width= 42)
-		bullet5 = textwrap.wrap(conditionFive, width= 42)
-	if scenarioLength > 774:
-		conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 24)
-		bullet1 = textwrap.wrap(conditionOne, width= 48)
-		bullet2 = textwrap.wrap(conditionTwo, width= 48)
-		bullet3 = textwrap.wrap(conditionThree, width= 48)
-		bullet4 = textwrap.wrap(conditionFour, width= 48)
-		bullet5 = textwrap.wrap(conditionFive, width= 48)
+		varSize = 42
+
+		bullet1 = textwrap.wrap(conditionOne, width= varSize)
+		bullet2 = textwrap.wrap(conditionTwo, width= varSize)
+		bullet3 = textwrap.wrap(conditionThree, width= varSize)
+		bullet4 = textwrap.wrap(conditionFour, width= varSize)
+		bullet5 = textwrap.wrap(conditionFive, width= varSize)
+
+		if len(bullet1)+len(bullet2)+len(bullet3)+len(bullet4)+len(bullet5) >20:
+
+			conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 24)
+			varSize = 48
+
+			bullet1 = textwrap.wrap(conditionOne, width= varSize)
+			bullet2 = textwrap.wrap(conditionTwo, width= varSize)
+			bullet3 = textwrap.wrap(conditionThree, width= varSize)
+			bullet4 = textwrap.wrap(conditionFour, width= varSize)
+			bullet5 = textwrap.wrap(conditionFive, width= varSize)
 
 	# Calculate text size for wrapping
 	conditionsFontSize = conditionsFont.getbbox(conditionOne);
@@ -119,15 +134,21 @@ for index, row in df.iterrows():
 	
 	# Draw conditions in wrapped lines of text on the card 
 	# The first line of each condition has a check mark
-	Image.Image.paste(card, checkImage, (60, conditionHeight))
+	onecounter = 0
 	for line in bullet1:
+		if onecounter == 0:
+			Image.Image.paste(card, checkImage, (60, conditionHeight))
 		draw.text((130, conditionHeight), line, fill='black', font=conditionsFont)
 		conditionHeight += conditionsFontSize[3] # Move to the next line
+		onecounter += 1
 
-	Image.Image.paste(card, checkImage, (60, conditionHeight+30))
+	twocounter = 0
 	for line in bullet2:
+		if twocounter == 0:
+			Image.Image.paste(card, checkImage, (60, conditionHeight+30))
 		draw.text((130, conditionHeight+30), line, fill='black', font=conditionsFont)
 		conditionHeight += conditionsFontSize[3] # Move to the next line
+		twocounter += 1
 
 	threecounter = 0
 	for line in bullet3:
