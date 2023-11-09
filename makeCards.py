@@ -19,6 +19,18 @@ df = pd.read_csv(csvFile)
 
 df = df.fillna('')
 
+def splitOnNewLine(condition, varSize):
+	temp = condition.split('\n')
+	tempList = list()
+	bulletX = textwrap.wrap(condition, width= varSize)
+
+	if len(temp)>1:
+		for line in temp:
+			tempList = tempList + textwrap.wrap(line, width= varSize)
+		bulletX = tempList
+
+	return bulletX
+
 # Repeat this process on each card in the CSV
 for index, row in df.iterrows():
 
@@ -39,41 +51,46 @@ for index, row in df.iterrows():
 	conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 30)
 	varSize = 38
 
-	temp = conditionOne.split('\n')
-	tempList = list()
+	bullet1 = splitOnNewLine(conditionOne, varSize)
+	bullet2 = splitOnNewLine(conditionTwo, varSize)
+	bullet3 = splitOnNewLine(conditionThree, varSize)
+	bullet4 = splitOnNewLine(conditionFour, varSize)
+	bullet5 = splitOnNewLine(conditionFive, varSize)
 
-	bullet1 = textwrap.wrap(conditionOne, width= varSize)
+	numberOfRows = len(bullet1)+len(bullet2)+len(bullet3)+len(bullet4)+len(bullet5)
 
-	if len(temp)>1:
-		for line in temp:
-			tempList = tempList + textwrap.wrap(line, width= varSize)
-		bullet1 = tempList
-
-	bullet2 = textwrap.wrap(conditionTwo, width= varSize)
-	bullet3 = textwrap.wrap(conditionThree, width= varSize)
-	bullet4 = textwrap.wrap(conditionFour, width= varSize)
-	bullet5 = textwrap.wrap(conditionFive, width= varSize)
-
-	if len(bullet1)+len(bullet2)+len(bullet3)+len(bullet4)+len(bullet5) >17:
+	if numberOfRows >17:
 		conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 26)
 		varSize = 42
 
-		bullet1 = textwrap.wrap(conditionOne, width= varSize)
-		bullet2 = textwrap.wrap(conditionTwo, width= varSize)
-		bullet3 = textwrap.wrap(conditionThree, width= varSize)
-		bullet4 = textwrap.wrap(conditionFour, width= varSize)
-		bullet5 = textwrap.wrap(conditionFive, width= varSize)
+		bullet1 = splitOnNewLine(conditionOne, varSize)
+		bullet2 = splitOnNewLine(conditionTwo, varSize)
+		bullet3 = splitOnNewLine(conditionThree, varSize)
+		bullet4 = splitOnNewLine(conditionThree, varSize)
+		bullet5 = splitOnNewLine(conditionFive, varSize)
+		numberOfRows = len(bullet1)+len(bullet2)+len(bullet3)+len(bullet4)+len(bullet5)
 
-		if len(bullet1)+len(bullet2)+len(bullet3)+len(bullet4)+len(bullet5) >20:
-
+		if numberOfRows >20:
 			conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 24)
 			varSize = 48
 
-			bullet1 = textwrap.wrap(conditionOne, width= varSize)
-			bullet2 = textwrap.wrap(conditionTwo, width= varSize)
-			bullet3 = textwrap.wrap(conditionThree, width= varSize)
-			bullet4 = textwrap.wrap(conditionFour, width= varSize)
-			bullet5 = textwrap.wrap(conditionFive, width= varSize)
+			bullet1 = splitOnNewLine(conditionOne, varSize)
+			bullet2 = splitOnNewLine(conditionTwo, varSize)
+			bullet3 = splitOnNewLine(conditionThree, varSize)
+			bullet4 = splitOnNewLine(conditionThree, varSize)
+			bullet5 = splitOnNewLine(conditionFive, varSize)
+			numberOfRows = len(bullet1)+len(bullet2)+len(bullet3)+len(bullet4)+len(bullet5)
+		
+		if numberOfRows >21:
+			conditionsFont = ImageFont.truetype("fonts/BioRhyme-Regular.ttf", 22)
+			varSize = 53
+
+			bullet1 = splitOnNewLine(conditionOne, varSize)
+			bullet2 = splitOnNewLine(conditionTwo, varSize)
+			bullet3 = splitOnNewLine(conditionThree, varSize)
+			bullet4 = splitOnNewLine(conditionThree, varSize)
+			bullet5 = splitOnNewLine(conditionFive, varSize)
+			numberOfRows = len(bullet1)+len(bullet2)+len(bullet3)+len(bullet4)+len(bullet5)
 
 	# Calculate text size for wrapping
 	conditionsFontSize = conditionsFont.getbbox(conditionOne);
